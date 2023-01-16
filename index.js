@@ -24,10 +24,25 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const run = async()=>{
     try{
         const usersCollection = client.db("videoSharing").collection("users")
+        const productsCollection = client.db("videoSharing").collection("products")
+
+        // get product from database
+
+        app.get('/product',async(req,res)=>{
+            const result = await productsCollection.find({}).toArray()
+            res.send(result)
+        })
+
+        // post route
 
         app.post('/user',async(req,res)=>{
             const user = req.body
             const result = await usersCollection.insertOne(user)
+            res.send(result)
+        })
+        app.post('/product',async(req,res)=>{
+            const product = req.body
+            const result = await productsCollection.insertOne(product)
             res.send(result)
         })
     }
