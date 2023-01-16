@@ -26,6 +26,7 @@ const run = async()=>{
         const usersCollection = client.db("videoSharing").collection("users")
         const productsCollection = client.db("videoSharing").collection("products")
         const commentsCollection = client.db("videoSharing").collection("comments")
+        const likesCollection = client.db("videoSharing").collection("likes")
 
         // get user role
 
@@ -62,6 +63,14 @@ const run = async()=>{
             const result = await commentsCollection.find(filter).toArray()
             res.send(result)
         })
+        // get likes
+
+        app.get('/likes/:id',async(req,res)=>{
+            const id = req.params.id
+            const filter = {productId:id}
+            const result = await likesCollection.find(filter).toArray()
+            res.send(result)
+        })
 
         // post route
 
@@ -75,9 +84,17 @@ const run = async()=>{
             const result = await productsCollection.insertOne(product)
             res.send(result)
         })
+
+        // comment post 
         app.post('/comment',async(req,res)=>{
             const comment = req.body
             const result = await commentsCollection.insertOne(comment)
+            res.send(result)
+        })
+        // Like post 
+        app.post('/like',async(req,res)=>{
+            const like = req.body
+            const result = await likesCollection.insertOne(like)
             res.send(result)
         })
     }
